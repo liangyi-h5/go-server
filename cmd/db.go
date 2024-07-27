@@ -40,9 +40,7 @@ func initDb() *sql.DB {
 func createWriteDB() *sql.DB {
 
 	// 只读
-	// dsn := "app_readonly:patpat@tcp(192.168.11.111:3306)/patpat"
-	dsn := "app_rw_0:patpat@tcp(192.168.11.111:3306)/patpat"
-
+	dsn := "username:password@tcp(127.0.0.1:3306)/yourdatabase?charset=utf8mb4&parseTime=True&loc=Local"
 	// 打开数据库连接
 	WriteDB, err := sql.Open("mysql", dsn)
 	if err != nil {
