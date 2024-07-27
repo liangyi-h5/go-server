@@ -2,11 +2,13 @@ package main
 
 import (
 	"database/sql"
+	"os"
 
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/goccy/go-json"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/log"
+	"github.com/joho/godotenv"
 )
 
 var readonlyDB *sql.DB // 声明全局 db 变量
@@ -21,8 +23,6 @@ type User struct {
 	Name string `json:"name"`
 	Age  int    `json:"age"`
 }
-
-const port = ":7070"
 
 func helloHandler(c *fiber.Ctx) error {
 	data := User{
@@ -51,6 +51,13 @@ func helloHandler(c *fiber.Ctx) error {
 }
 
 func main() {
+	err := godotenv.Load("../.env")
+	if err != nil {
+		log.Info(err.Error())
+		return
+	}
+	port := os.Getenv("PORT")
+	log.Info(port, "port")
 	readonlyDB = initDb()
 	writeDB = createWriteDB()
 	app := fiber.New(fiber.Config{
@@ -74,5 +81,5 @@ func main() {
 		log.Error(c.Context().URI())
 		return c.Status(fiber.StatusNotFound).SendString(string(errorJsonResponse))
 	})
-	app.Listen(port)
+	app.Listen(":" + port)
 }

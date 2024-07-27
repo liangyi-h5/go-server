@@ -2,6 +2,7 @@ package main
 
 import (
 	"database/sql"
+	"os"
 	"time"
 
 	_ "github.com/go-sql-driver/mysql"
@@ -10,9 +11,9 @@ import (
 
 // var db *sql.DB // 声明全局 db 变量
 func initDb() *sql.DB {
-
 	// 只读
-	dsn := "username:password@tcp(127.0.0.1:3306)/yourdatabase?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := os.Getenv("READDB")
+	// dsn := "username:password@tcp(127.0.0.1:3306)/yourdatabase?charset=utf8mb4&parseTime=True&loc=Local"
 
 	// 打开数据库连接
 	db, err := sql.Open("mysql", dsn)
@@ -40,7 +41,8 @@ func initDb() *sql.DB {
 func createWriteDB() *sql.DB {
 
 	// 只读
-	dsn := "username:password@tcp(127.0.0.1:3306)/yourdatabase?charset=utf8mb4&parseTime=True&loc=Local"
+	dsn := os.Getenv("WRITEDB")
+
 	// 打开数据库连接
 	WriteDB, err := sql.Open("mysql", dsn)
 	if err != nil {
